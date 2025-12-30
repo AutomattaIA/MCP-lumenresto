@@ -151,14 +151,24 @@ API_KEY=tu-api-key-secreta-muy-larga-y-segura
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-### 2.4 Verificar Deployment
+### 2.4 Configurar Dominio Público
+
+1. En Railway Dashboard → Servicio `lumen-resto-api` → **Settings** → **Domains**
+2. Click en **"Generate Domain"** (requerido en plan gratuito)
+3. Railway asignará un dominio público (ej: `lumen-resto-api-production.up.railway.app`)
+4. Anotar también el dominio privado interno (ej: `lumen-resto-api.railway.internal`) y el puerto asignado
+
+**Ejemplo de dominios generados:**
+- **Public:** `lumen-resto-api-production.up.railway.app` (Port: 2025)
+- **Private:** `lumen-resto-api.railway.internal`
+
+### 2.5 Verificar Deployment
 
 1. Railway automáticamente construye y despliega
 2. Esperar a que el deployment termine (ver logs en Railway Dashboard)
-3. Railway asigna una URL pública (ej: `https://lumen-resto-production.up.railway.app`)
-4. Probar health check:
+3. Probar health check con el dominio público:
 ```bash
-curl https://tu-app.railway.app/health
+curl https://lumen-resto-api-production.up.railway.app/health
 ```
 
 Deberías ver:
@@ -173,11 +183,12 @@ Deberías ver:
 }
 ```
 
-### 2.5 (Opcional) Configurar Dominio Personalizado
+### 2.6 (Opcional) Configurar Dominio Personalizado
 
-1. En Railway Dashboard → **Settings** → **Domains**
-2. Click en **"Generate Domain"** o agregar dominio personalizado
-3. Configurar DNS según instrucciones
+Si tienes un dominio personalizado:
+1. En Railway Dashboard → Servicio `lumen-resto-api` → **Settings** → **Domains**
+2. Click en **"Custom Domain"** y agregar tu dominio
+3. Configurar DNS según instrucciones de Railway
 
 ## 🔧 Paso 3: Configurar MCP Server Local
 
@@ -191,12 +202,32 @@ npm run build
 
 ### 3.2 Configurar Variables de Entorno
 
+**Opción A: Si el MCP Server está en Railway (mismo proyecto)**
+
+En Railway Dashboard → Servicio `lumen-resto-mcp-server` → **Variables** → Agregar:
+
+```env
+RAILWAY_API_URL=http://lumen-resto-api.railway.internal:2025
+API_KEY=tu-api-key-secreta-muy-larga-y-segura
+```
+
+**Nota:** Usar el dominio privado interno con HTTP (no HTTPS) y el puerto asignado:
+- Dominio privado: `lumen-resto-api.railway.internal`
+- Puerto: `2025` (o el puerto que Railway asignó)
+- Formato: `http://lumen-resto-api.railway.internal:2025`
+
+**Opción B: Si el MCP Server es local**
+
 Crear archivo `mcp-server/.env`:
 
 ```env
-RAILWAY_API_URL=https://tu-app.railway.app
+RAILWAY_API_URL=https://lumen-resto-api-production.up.railway.app
 API_KEY=tu-api-key-secreta-muy-larga-y-segura
 ```
+
+**Nota:** Usar el dominio público con HTTPS (sin especificar puerto, usa 443 por defecto):
+- Dominio público: `lumen-resto-api-production.up.railway.app`
+- Formato: `https://lumen-resto-api-production.up.railway.app`
 
 ### 3.3 Configurar en Cursor
 
@@ -223,7 +254,7 @@ C:\Users\Usuario\.cursor\mcp_settings.json
       "command": "node",
       "args": ["C:/Users/Usuario/Documents/GitHub/MCP-lumenresto/mcp-server/dist/index.js"],
       "env": {
-        "RAILWAY_API_URL": "https://tu-app.railway.app",
+        "RAILWAY_API_URL": "https://lumen-resto-api-production.up.railway.app",
         "API_KEY": "tu-api-key-secreta-muy-larga-y-segura"
       }
     }
@@ -245,10 +276,10 @@ Seguir la guía detallada en [ELEVENLABS_SETUP.md](ELEVENLABS_SETUP.md)
 
 ```bash
 # Health check
-curl https://tu-app.railway.app/health
+curl https://lumen-resto-api-production.up.railway.app/health
 
 # Check schedule (requiere API key)
-curl -X POST https://tu-app.railway.app/api/check-schedule \
+curl -X POST https://lumen-resto-api-production.up.railway.app/api/check-schedule \
   -H "Content-Type: application/json" \
   -H "X-API-Key: tu-api-key" \
   -d '{
