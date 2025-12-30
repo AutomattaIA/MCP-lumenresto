@@ -1,0 +1,26 @@
+{
+  "name": "lumen-resto-platform",
+  "version": "1.0.0",
+  "description": "Plataforma de reservas Lumen Resto con Railway API, MCP Server y ElevenLabs integration",
+  "private": true,
+  "workspaces": [
+    "rest-api",
+    "mcp-server"
+  ],
+  "scripts": {
+    "dev:api": "npm run dev --workspace=rest-api",
+    "dev:mcp": "npm run dev --workspace=mcp-server",
+    "build": "npm run build --workspaces",
+    "type-check": "npm run type-check --workspaces"
+  },
+  "keywords": [
+    "mcp",
+    "railway",
+    "elevenlabs",
+    "restaurant",
+    "reservations"
+  ],
+  "author": "",
+  "license": "MIT"
+}
+
