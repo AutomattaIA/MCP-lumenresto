@@ -11,6 +11,9 @@
     "dev:api": "npm run dev --workspace=rest-api",
     "dev:mcp": "npm run dev --workspace=mcp-server",
     "build": "npm run build --workspaces",
+    "start": "npm run start --workspace=lumen-resto-api",
+    "start:api": "npm run start --workspace=lumen-resto-api",
+    "start:mcp": "npm run start --workspace=lumen-resto-mcp-server",
     "type-check": "npm run type-check --workspaces"
   },
   "keywords": [
