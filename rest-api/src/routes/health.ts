@@ -10,7 +10,7 @@ const router = Router();
  */
 router.get(
   '/health',
-  asyncHandler(async (req: Request, res: Response) => {
+  asyncHandler(async (_req: Request, res: Response) => {
     const dbHealthy = await checkSupabaseConnection();
 
     const health = {
