@@ -26,9 +26,19 @@ try {
 } catch (error) {
   if (error instanceof z.ZodError) {
     console.error('❌ Error en variables de entorno:');
+    console.error('');
     error.errors.forEach((err) => {
       console.error(`  - ${err.path.join('.')}: ${err.message}`);
     });
+    console.error('');
+    console.error('📋 Variables requeridas en Railway:');
+    console.error('   1. SUPABASE_URL - URL de tu proyecto Supabase');
+    console.error('   2. SUPABASE_SERVICE_KEY - Service role key de Supabase');
+    console.error('   3. API_KEY - API key secreta (mínimo 32 caracteres)');
+    console.error('');
+    console.error('💡 Configura estas variables en Railway Dashboard:');
+    console.error('   Railway → Tu Servicio → Variables → Add Variable');
+    console.error('');
     process.exit(1);
   }
   throw error;
