@@ -57,17 +57,24 @@ class RailwayApiClient {
     });
 
     if (!response.ok) {
-      const errorData: ApiErrorResponse = (await response.json().catch(() => ({
-        error: 'UnknownError',
-        message: `HTTP ${response.status}: ${response.statusText}`,
-      }))) as ApiErrorResponse;
+      let errorData: ApiErrorResponse;
+      try {
+        const json = await response.json();
+        errorData = json as ApiErrorResponse;
+      } catch {
+        errorData = {
+          error: 'UnknownError',
+          message: `HTTP ${response.status}: ${response.statusText}`,
+        };
+      }
 
       throw new Error(
         errorData.message || `Error ${response.status}: ${response.statusText}`
       );
     }
 
-    return (await response.json()) as T;
+    const json = await response.json();
+    return json as T;
   }
 
   /**

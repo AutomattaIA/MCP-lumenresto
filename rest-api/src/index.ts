@@ -22,9 +22,10 @@ app.use(express.urlencoded({ extended: true }));
 
 // Request logging (solo en desarrollo)
 if (!config.server.isProduction) {
-  app.use((req, _res, next) => {
+  app.use((req: express.Request, _res: express.Response, next: express.NextFunction) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
     next();
+    void _res; // Marcar como usado intencionalmente
   });
 }
 

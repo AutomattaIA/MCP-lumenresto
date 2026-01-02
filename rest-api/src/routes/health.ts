@@ -11,6 +11,7 @@ const router = Router();
 router.get(
   '/health',
   asyncHandler(async (_req: Request, res: Response) => {
+    void _req; // Marcar como usado intencionalmente
     const dbHealthy = await checkSupabaseConnection();
 
     const health = {
